@@ -7,11 +7,22 @@ playerImage.src = "images/spritesheet.png";
 
 
 
-
+let i = 0
+let gameframe = 0;
 function animation() {
     ctx.clearRect(0, 0, 600, 600)
-    ctx.drawImage(playerImage, 0, 0, 210, 270 * 2, 0, 0, 210, 165)
+
+    if (gameframe % 15 === 0) {
+        i++;
+        if (i > 4) {
+            i = 0;
+        }
+    }
+
+    ctx.drawImage(playerImage, 151 * i, 185 * 4, 151, 200, 0, 0, 300, 185)
     requestAnimationFrame(animation)
+
+    gameframe++
 
 
 }
