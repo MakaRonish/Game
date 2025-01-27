@@ -20,27 +20,23 @@ let gameFrame = 0;
 class Enemy {
     constructor() {
         this.image = new Image();
-        this.image.src = 'enemies/enemy3.png';
+        this.image.src = 'enemies/enemy2.png';
         this.speed = Math.random() * 4 + 1;
-        this.spriteWidth = 218;
-        this.spriteHeight = 177;
+        this.spriteWidth = 266;
+        this.spriteHeight = 188;
         this.width = this.spriteWidth / 2.5;
         this.height = this.spriteHeight / 2.5;
         this.frame = 1;
         this.flapSpeed = Math.floor(Math.random() * 3 + 1);
         this.x = Math.random() * (canvas.width - this.width);
         this.y = Math.random() * (canvas.height - this.height);
-        this.angle = 0;
-        this.angleSpeed = Math.random() * 1.5 + 0.5;
-        this.curve = Math.random() * 200 + 50;
 
 
     }
     update() {
-        this.x = canvas.width / 2 * Math.cos(this.angle * Math.PI / 90) + (CANVAS_WIDTH / 2 - this.width / 2);
-        this.y = canvas.height / 2 * Math.cos(this.angle * Math.PI / 180) + (CANVAS_HEIGHT / 2 - this.height / 2);
+        this.x -= this.speed;
         if (this.x + this.width < 0) this.x = canvas.width;
-        this.angle += this.angleSpeed;
+        this.y += Math.random() * 10 - 5;
         if (gameFrame % this.flapSpeed === 0) {
             this.frame > 4 ? this.frame = 0 : this.frame++;
         }
@@ -60,6 +56,45 @@ for (let i = 0; i <= numberOfEnemies; i++) {
 
 }
 console.log(enemiesArray)
+let xcord, ycord;
+xcord = 0;
+ycord = 0;
+let charWidth, charHeight;
+charWidth = 90;
+charHeight = 90;
+
+function movement() {
+    document.addEventListener('keydown', (event) => {
+
+        if (event.key == 'ArrowRight' || event.key == 'd') {
+            if (xcord < CANVAS_WIDTH - charWidth) xcord += 10;
+
+
+        } else if (event.key == 'ArrowLeft' || event.key == 'a') {
+            if (xcord > 0) xcord -= 10;
+
+
+
+        } else if (event.key == 'ArrowDown' || event.key == 's') {
+            if (ycord < CANVAS_HEIGHT - charHeight) ycord += 10;
+
+
+        } else if (event.key == 'ArrowUp' || event.key == 'w') {
+            if (ycord > 0) ycord -= 10;
+
+
+        }
+
+    })
+
+}
+movement()
+
+const hero = new Image();
+hero.src = 'image.png';
+
+
+
 function animate() {
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
     enemiesArray.forEach((enemy) => {
@@ -68,6 +103,7 @@ function animate() {
     })
     gameFrame++;
 
+    ctx.fillRect(xcord, ycord, charWidth, charHeight);
 
 
     requestAnimationFrame(animate)
