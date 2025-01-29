@@ -9,6 +9,11 @@ playerImage.src = "images/spritesheet.png";
 
 let i = 0
 let gameframe = 0;
+
+playerImage.onload = () => {
+    // This ensures that the animation starts only after the image is loaded
+    animation();
+};
 function animation() {
     ctx.clearRect(0, 0, 600, 600)
 

@@ -17,6 +17,7 @@ let gameFrame = 0;
 //     height: 200,
 // }
 
+// 
 class Enemy {
     constructor() {
         this.image = new Image();
