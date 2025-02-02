@@ -2,7 +2,12 @@ const canvas = document.getElementById('canvas1');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+const collisionCanvas = document.getElementById('collisionCanvas');
+const collisionCtx = collisionCanvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 let score = 0;
+ctx.font = '50px impact'
 let timeToNextRaven = 0;
 let ravenInterval = 500;
 let lastTime = 0;
@@ -26,6 +31,8 @@ class Raven {
         this.maxFrame = 4;
         this.timeSinceFlap = 0;
         this.flapInterval = Math.random() * 50 + 50;
+        this.randomColors = [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)]
+        this.color = 'rgb(' + this.randomColors[0] + ',' + this.randomColors[1] + ',' + this.randomColors[2] + ')';
     }
     update(deltatime) {
         if (this.y < 0 || this.y > canvas.height - this.height) {
@@ -36,30 +43,47 @@ class Raven {
         if (this.x < 0 - this.width) this.markedForDeletion = true;
         this.timeSinceFlap += deltatime;
         if (this.timeSinceFlap > this.flapInterval) {
-            if (this.frame > this.maxframe) this.frame = 0;
+            if (this.frame > this.maxFrame) this.frame = 0;
             else this.frame++;
             this.timeSinceFlap = 0;
 
         }
-        console.log(deltatime);
+
     }
     draw() {
-        ctx.strokeRect(this.x, this.y, this.width, this.height
+        collisionCtx.fillStyle = this.color;
+        collisionCtx.fillRect(this.x, this.y, this.width, this.height
         );
-        ctx.drawImage(this.image, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
+        ctx.drawImage(this.image, this.frame * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
     }
 }
 
 
+function drawscore() {
+    ctx.fillStyle = 'white';
+    ctx.fillText('Score:' + score, 50, 75);
+}
+
+window.addEventListener('click', function (e) {
+    const detectPixelColor = collisionCtx.getImageData(e.x, e.y, 1, 1);
+    console.log(detectPixelColor)
+})
+
+
 function animate(timestamp) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    collisionCtx.clearRect(0, 0, canvas.width, canvas.height);
     let deltatime = timestamp - lastTime;
     lastTime = timestamp
     timeToNextRaven += deltatime;
     if (timeToNextRaven > ravenInterval) {
         ravens.push(new Raven());
         timeToNextRaven = 0;
+        ravens.sort(function (a, b) {
+            return a.width - b.width;
+        })
     };
+    drawscore();
     [...ravens].forEach(object => object.update(deltatime));
     [...ravens].forEach(object => object.draw());
     ravens = ravens.filter(object => !object.markedForDeletion);
