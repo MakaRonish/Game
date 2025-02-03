@@ -1,5 +1,10 @@
 body {
-    /* background: linear-gradient(to right, red, green, blue); */
+    background-image: url('images/back.jpg');
+    background-size: cover;
+    /* Ensures the image covers the whole screen */
+    background-position: center;
+    /* Centers the image */
+    background-repeat: no-repeat;
     width: 100vm;
     height: 100vh;
     overflow: hidden;
@@ -15,4 +20,5 @@ canvas {
 
 #collisionCanvas {
     /* background-color: red; */
+    opacity: 0;
 }
